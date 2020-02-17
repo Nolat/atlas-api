@@ -5,8 +5,13 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  ManyToOne,
+  JoinColumn
 } from "typeorm";
+
+// * Entity
+import { Faction } from "entities";
 
 @Entity()
 @ObjectType()
@@ -18,6 +23,11 @@ export default class User extends BaseEntity {
   @Field(() => String)
   @Column({ type: "text" })
   username: string;
+
+  @Field(() => Faction)
+  @ManyToOne(() => Faction, { onDelete: "SET NULL" })
+  @JoinColumn()
+  faction: Faction;
 
   @Field()
   @CreateDateColumn()
