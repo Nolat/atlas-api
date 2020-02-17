@@ -16,7 +16,7 @@ import { User } from "entities";
 export default class Faction extends BaseEntity {
   @Field(() => String)
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @Field(() => String)
   @Column({ type: "text" })
@@ -25,6 +25,14 @@ export default class Faction extends BaseEntity {
   @Field(() => String)
   @Column({ type: "text" })
   description: string;
+
+  @Field(() => String)
+  @Column({ type: "text" })
+  color: string;
+
+  @Field(() => String)
+  @Column({ type: "text" })
+  icon: string;
 
   @Field(() => Number)
   memberCount(): Promise<number> {
@@ -41,11 +49,11 @@ export default class Faction extends BaseEntity {
     return true;
   }
 
-  @Field()
-  @CreateDateColumn()
+  @Field(() => String)
+  @CreateDateColumn({ type: "timestamp" })
   createdAt: string;
 
-  @Field()
+  @Field(() => String)
   @UpdateDateColumn({ type: "timestamp" })
-  updatedAt: number;
+  updatedAt: string;
 }

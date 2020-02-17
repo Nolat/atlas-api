@@ -24,16 +24,20 @@ export default class User extends BaseEntity {
   @Column({ type: "text" })
   username: string;
 
-  @Field(() => Faction)
-  @ManyToOne(() => Faction, { onDelete: "SET NULL" })
+  @Field(() => Faction, { nullable: true })
+  @ManyToOne(() => Faction, { onDelete: "SET NULL", nullable: true })
   @JoinColumn()
-  faction: Faction;
+  faction: Faction | undefined;
 
-  @Field()
-  @CreateDateColumn()
+  @Field(() => String, { nullable: true })
+  @Column({ type: "timestamp", nullable: true })
+  joinedFactionAt: string | undefined;
+
+  @Field(() => String)
+  @CreateDateColumn({ type: "timestamp" })
   createdAt: string;
 
-  @Field()
+  @Field(() => String)
   @UpdateDateColumn({ type: "timestamp" })
-  updatedAt: number;
+  updatedAt: string;
 }

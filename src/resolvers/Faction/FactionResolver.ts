@@ -1,8 +1,13 @@
-import { UserInputError } from "apollo-server-express";
-import { Authorized, Query, Resolver, Arg } from "type-graphql";
+import { UserInputError, ApolloError } from "apollo-server-express";
+import { Authorized, Query, Resolver, Arg, Mutation } from "type-graphql";
 
 // * Entities
 import { Faction } from "entities";
+
+// * Helpers
+import { Role } from "discord.js";
+import createFactionRoles from "./helpers/createFactionRoles";
+import createFactionChannels from "./helpers/createFactionChannels";
 
 @Resolver(() => Faction)
 export default class FactionResolver {
@@ -19,6 +24,38 @@ export default class FactionResolver {
 
     if (!faction)
       throw new UserInputError(`Cannot find faction with name : ${name}`);
+
+    return faction;
+  }
+
+  @Authorized()
+  @Mutation(() => Faction)
+  async createFaction(
+    @Arg("name") name: string,
+    @Arg("description") description: string,
+    @Arg("color") color: string,
+    @Arg("icon") icon: string
+  ) {
+    const factionWithSameName = await Faction.findOne({
+      where: { name }
+    });
+
+    if (factionWithSameName)
+      throw new ApolloError(
+        `A faction already exist with name:  ${name}`,
+        "FACTION_NAME_UNAVAILABLE"
+      );
+
+    const faction = new Faction();
+    faction.name = name;
+    faction.description = description;
+    faction.color = color;
+    faction.icon = icon;
+
+    await faction.save();
+
+    const role: Role = await createFactionRoles(name, color, icon);
+    createFactionChannels(name, icon, role);
 
     return faction;
   }
