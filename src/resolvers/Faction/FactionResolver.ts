@@ -1,11 +1,11 @@
 import { UserInputError, ApolloError } from "apollo-server-express";
+import { Role } from "discord.js";
 import { Authorized, Query, Resolver, Arg, Mutation } from "type-graphql";
 
 // * Entities
 import { Faction } from "entities";
 
 // * Helpers
-import { Role } from "discord.js";
 import createFactionRoles from "./helpers/createFactionRoles";
 import createFactionChannels from "./helpers/createFactionChannels";
 
