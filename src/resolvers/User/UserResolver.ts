@@ -28,7 +28,7 @@ export default class UserResolver {
 
   @Authorized()
   @Mutation(() => User)
-  async setFaction(
+  async setUserFaction(
     @Arg("id") id: string,
     @Arg("nameFaction") nameFaction: string
   ) {
@@ -50,8 +50,25 @@ export default class UserResolver {
       );
 
     user.faction = faction;
-
     user.joinedFactionAt = moment().toISOString();
+
+    return user.save();
+  }
+
+  @Authorized()
+  @Mutation(() => User)
+  async unsetUserFaction(@Arg("id") id: string) {
+    const user = await getUser(id, ["faction"]);
+    if (!user) throw new UserInputError(`Cannot find user with id : ${id}`);
+
+    if (!user.faction)
+      throw new ApolloError(
+        `User : ${user.username} doesn't have a faction`,
+        "MEMBER_WITHOUT_FACTION"
+      );
+
+    user.faction = null;
+    user.joinedFactionAt = null;
 
     return user.save();
   }
