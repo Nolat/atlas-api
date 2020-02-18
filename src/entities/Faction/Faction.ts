@@ -50,10 +50,10 @@ export default class Faction extends BaseEntity {
   }
 
   @Field(() => String)
-  @CreateDateColumn({ type: "timestamp" })
+  @CreateDateColumn({ type: "timestamp with time zone" })
   createdAt: string;
 
   @Field(() => String)
-  @UpdateDateColumn({ type: "timestamp" })
+  @UpdateDateColumn({ type: "timestamp with time zone" })
   updatedAt: string;
 }

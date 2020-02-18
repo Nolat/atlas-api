@@ -27,17 +27,17 @@ export default class User extends BaseEntity {
   @Field(() => Faction, { nullable: true })
   @ManyToOne(() => Faction, { onDelete: "SET NULL", nullable: true })
   @JoinColumn()
-  faction: Faction | undefined;
+  faction: Faction | null | undefined;
 
   @Field(() => String, { nullable: true })
-  @Column({ type: "timestamp", nullable: true })
-  joinedFactionAt: string | undefined;
+  @Column({ type: "timestamp with time zone", nullable: true })
+  joinedFactionAt: string | null;
 
   @Field(() => String)
-  @CreateDateColumn({ type: "timestamp" })
+  @CreateDateColumn({ type: "timestamp with time zone" })
   createdAt: string;
 
   @Field(() => String)
-  @UpdateDateColumn({ type: "timestamp" })
+  @UpdateDateColumn({ type: "timestamp with time zone" })
   updatedAt: string;
 }
