@@ -7,6 +7,8 @@ import { User, Faction } from "entities";
 
 // * Helpers
 import getUser from "./helpers/getUser";
+import giveFactionRole from "./helpers/giveFactionRole";
+import removeFactionRole from "./helpers/removeFactionRole";
 
 @Resolver(() => User)
 export default class UserResolver {
@@ -30,7 +32,7 @@ export default class UserResolver {
   @Mutation(() => User)
   async setUserFaction(
     @Arg("id") id: string,
-    @Arg("nameFaction") nameFaction: string
+    @Arg("factionName") factionName: string
   ) {
     const user = await getUser(id, ["faction"]);
 
@@ -42,15 +44,17 @@ export default class UserResolver {
         "MEMBER_ALREADY_IN_FACTION"
       );
 
-    const faction = await Faction.findOne({ where: { name: nameFaction } });
+    const faction = await Faction.findOne({ where: { name: factionName } });
 
     if (!faction)
       throw new UserInputError(
-        `Cannont find faction with name : ${nameFaction}`
+        `Cannont find faction with name : ${factionName}`
       );
 
     user.faction = faction;
     user.joinedFactionAt = moment().toISOString();
+
+    giveFactionRole(id, factionName);
 
     return user.save();
   }
@@ -66,6 +70,8 @@ export default class UserResolver {
         `User : ${user.username} doesn't have a faction`,
         "MEMBER_WITHOUT_FACTION"
       );
+
+    removeFactionRole(id, user.faction.name);
 
     user.faction = null;
     user.joinedFactionAt = null;
