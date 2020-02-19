@@ -2,6 +2,7 @@ import { ApolloServer } from "apollo-server-express";
 import cors from "cors";
 import express, { Express } from "express";
 import session from "express-session";
+import http from "http";
 import passport from "passport";
 import { buildSchema } from "type-graphql";
 
@@ -37,7 +38,7 @@ const initServer = async () => {
   await setupServer(app, server);
 
   // * Finally start the app
-  await startApp(app);
+  await startApp(app, server);
 };
 
 // * Setup Express app & ApolloServer
@@ -62,11 +63,19 @@ const setupServer = (app: Express, server: ApolloServer) => {
 };
 
 // * Start Express app
-const startApp = (app: Express) => {
+const startApp = (app: Express, server: ApolloServer) => {
+  const httpServer = http.createServer(app);
+  server.installSubscriptionHandlers(httpServer);
+
   // * Start listening on port
-  app.listen({ port: PORT }, () =>
-    console.log(`🚀 Server ready at http://localhost:${PORT}`)
-  );
+  httpServer.listen(PORT, () => {
+    console.log(
+      `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
+    );
+    console.log(
+      `🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`
+    );
+  });
 };
 
 export default initServer;

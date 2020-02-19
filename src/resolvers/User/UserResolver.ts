@@ -1,5 +1,13 @@
 import { ApolloError, UserInputError } from "apollo-server-express";
-import { Authorized, Query, Resolver, Arg, Mutation } from "type-graphql";
+import {
+  Authorized,
+  Query,
+  Resolver,
+  Arg,
+  Mutation,
+  PubSub,
+  Publisher
+} from "type-graphql";
 import moment from "moment-timezone";
 
 // * Entities
@@ -32,7 +40,8 @@ export default class UserResolver {
   @Mutation(() => User)
   async setUserFaction(
     @Arg("id") id: string,
-    @Arg("factionName") factionName: string
+    @Arg("factionName") factionName: string,
+    @PubSub("FACTION_DESCRIPTION_UPDATE") publish: Publisher<void>
   ) {
     const user = await getUser(id, ["faction"]);
 
@@ -48,20 +57,24 @@ export default class UserResolver {
 
     if (!faction)
       throw new UserInputError(
-        `Cannont find faction with name : ${factionName}`
+        `Cannot find faction with name : ${factionName}`
       );
 
     user.faction = faction;
     user.joinedFactionAt = moment().toISOString();
 
     giveFactionRole(id, factionName);
+    await publish();
 
     return user.save();
   }
 
   @Authorized()
   @Mutation(() => User)
-  async unsetUserFaction(@Arg("id") id: string) {
+  async unsetUserFaction(
+    @Arg("id") id: string,
+    @PubSub("FACTION_DESCRIPTION_UPDATE") publish: Publisher<void>
+  ) {
     const user = await getUser(id, ["faction"]);
     if (!user) throw new UserInputError(`Cannot find user with id : ${id}`);
 
@@ -75,6 +88,8 @@ export default class UserResolver {
 
     user.faction = null;
     user.joinedFactionAt = null;
+
+    await publish();
 
     return user.save();
   }

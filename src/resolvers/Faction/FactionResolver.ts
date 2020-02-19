@@ -1,6 +1,13 @@
 import { UserInputError, ApolloError } from "apollo-server-express";
 import { Role } from "discord.js";
-import { Authorized, Query, Resolver, Arg, Mutation } from "type-graphql";
+import {
+  Authorized,
+  Query,
+  Resolver,
+  Arg,
+  Mutation,
+  Subscription
+} from "type-graphql";
 
 // * Entities
 import { Faction } from "entities";
@@ -26,6 +33,11 @@ export default class FactionResolver {
       throw new UserInputError(`Cannot find faction with name : ${name}`);
 
     return faction;
+  }
+
+  @Subscription(() => [Faction], { topics: "FACTION_DESCRIPTION_UPDATE" })
+  factionDescriptionUpdate() {
+    return Faction.find();
   }
 
   @Authorized()
