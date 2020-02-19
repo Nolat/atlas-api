@@ -15,6 +15,8 @@ import { Faction } from "entities";
 // * Helpers
 import createFactionRoles from "./helpers/createFactionRoles";
 import createFactionChannels from "./helpers/createFactionChannels";
+import deleteFactionChannels from "./helpers/deleteFactionChannels";
+import deleteFactionRoles from "./helpers/deleteFactionRoles";
 
 @Resolver(() => Faction)
 export default class FactionResolver {
@@ -42,7 +44,7 @@ export default class FactionResolver {
 
   @Authorized()
   @Mutation(() => Faction)
-  async createFaction(
+  async addFaction(
     @Arg("name") name: string,
     @Arg("description") description: string,
     @Arg("color") color: string,
@@ -70,5 +72,26 @@ export default class FactionResolver {
     createFactionChannels(name, icon, role);
 
     return faction;
+  }
+
+  @Authorized()
+  @Mutation(() => Boolean)
+  async removeFaction(@Arg("name") name: string) {
+    const faction = await Faction.findOne({
+      where: { name }
+    });
+
+    if (!faction)
+      throw new ApolloError(
+        `Cannot find faction: ${name}`,
+        "CANNOT_FIND_FACTION"
+      );
+
+    deleteFactionChannels(name);
+    deleteFactionRoles(name);
+
+    Faction.remove(faction);
+
+    return true;
   }
 }
