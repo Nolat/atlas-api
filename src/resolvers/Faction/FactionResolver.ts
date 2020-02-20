@@ -1,21 +1,20 @@
 import { UserInputError, ApolloError } from "apollo-server-express";
 import { Role } from "discord.js";
-import {
-  Authorized,
-  Query,
-  Resolver,
-  Arg,
-  Mutation,
-  Subscription
-} from "type-graphql";
+import { Authorized, Query, Resolver, Arg, Mutation } from "type-graphql";
 
 // * Entities
-import { Faction } from "entities";
+import { Faction, ServerMessage } from "entities";
+
+// * Utils
+import { sendFactionMessage } from "utils/discord/helpers/sendFactionsMessage";
 
 // * Helpers
+import getDiscordGuild from "helpers/discord/getDiscordGuild";
+
 import createFactionRoles from "./helpers/createFactionRoles";
 import createFactionChannels from "./helpers/createFactionChannels";
 import deleteFactionChannels from "./helpers/deleteFactionChannels";
+import deleteFactionMessage from "./helpers/deleteFactionMessage";
 import deleteFactionRoles from "./helpers/deleteFactionRoles";
 
 @Resolver(() => Faction)
@@ -35,11 +34,6 @@ export default class FactionResolver {
       throw new UserInputError(`Cannot find faction with name : ${name}`);
 
     return faction;
-  }
-
-  @Subscription(() => [Faction], { topics: "FACTION_DESCRIPTION_UPDATE" })
-  factionDescriptionUpdate() {
-    return Faction.find();
   }
 
   @Authorized()
@@ -71,6 +65,9 @@ export default class FactionResolver {
     const role: Role = await createFactionRoles(name, color, icon);
     createFactionChannels(name, icon, role);
 
+    const server = getDiscordGuild()!;
+    sendFactionMessage(server, faction);
+
     return faction;
   }
 
@@ -91,6 +88,14 @@ export default class FactionResolver {
     deleteFactionRoles(name);
 
     Faction.remove(faction);
+
+    const serverMessage = await ServerMessage.findOne({
+      where: { type: name }
+    });
+    if (serverMessage) {
+      deleteFactionMessage(serverMessage);
+      ServerMessage.remove(serverMessage);
+    }
 
     return true;
   }
