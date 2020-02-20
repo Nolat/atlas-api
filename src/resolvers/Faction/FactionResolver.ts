@@ -28,7 +28,7 @@ export default class FactionResolver {
   @Authorized()
   @Query(() => Faction)
   async faction(@Arg("name") name: string) {
-    const faction = await Faction.find({ where: { name } });
+    const faction = await Faction.findOne({ where: { name } });
 
     if (!faction)
       throw new UserInputError(`Cannot find faction with name : ${name}`);
