@@ -18,7 +18,7 @@ const sendAccueilMessage = async (server: Guild) => {
     .setTitle("👋 Bienvenue")
     .setDescription(
       "Bienvenue cher joueur/joueuse sur Edell, un monde virtuel occupé par 3 factions en guerre, " +
-        `défendant chacun leurs idéaux. (Plus d’informations dans ${factionsChannel.toString}).` +
+        `défendant chacun leurs idéaux. (Plus d’informations dans ${factionsChannel.toString()}).` +
         "\n\nEdell est un monde particulier, où de nombreux univers se retrouvent. Ainsi, les factions " +
         "s’affrontent dans divers mondes allant d’Overwatch à Counter-Strike en passant par Minecraft et " +
         "bien d’autres…" +
