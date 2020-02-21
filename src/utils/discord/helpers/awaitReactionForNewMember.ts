@@ -64,7 +64,7 @@ export const awaitReactionAsNewMember = async (
     ) as TextChannel;
 
     generalChannel.send(
-      `Un nouveau joueur viens d'apparaitre. Bienvenue à toi ${member.user.toString()}.`
+      `Un nouveau joueur vient d'apparaitre. Bienvenue à toi ${member.user.toString()}.`
     );
   });
 };
