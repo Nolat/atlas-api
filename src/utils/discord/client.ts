@@ -6,6 +6,7 @@ import {
   awaitReactionForNewMember,
   awaitReactionAsNewMember
 } from "./helpers/awaitReactionForNewMember";
+import removeMemberAccueilReaction from "./helpers/removeMemberAccueilReaction";
 import sendAccueilMessage from "./helpers/sendAccueilMessage";
 import sendJoinMessage from "./helpers/sendJoinMessage";
 import sendLeaveMessage from "./helpers/sendLeaveMessage";
@@ -56,5 +57,6 @@ export default class DiscordClient {
     );
 
     sendLeaveMessage(server, member);
+    removeMemberAccueilReaction(server, member);
   }
 }
