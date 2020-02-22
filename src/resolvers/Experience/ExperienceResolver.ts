@@ -46,7 +46,7 @@ export default class UserResolver {
   }
 
   @Authorized()
-  @Mutation(() => User)
+  @Mutation(() => Experience)
   async giveUserExperience(
     @Arg("id") id: string,
     @Arg("experience") amount: number,
@@ -75,11 +75,11 @@ export default class UserResolver {
     }
     experience.value += amount;
 
-    return user.save();
+    return experience.save();
   }
 
   @Authorized()
-  @Mutation(() => User)
+  @Mutation(() => Experience)
   async removeUserExperience(
     @Arg("id") id: string,
     @Arg("experience") amount: number,
