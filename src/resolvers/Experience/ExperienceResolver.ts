@@ -76,4 +76,38 @@ export default class UserResolver {
 
     return user.save();
   }
+
+  @Authorized()
+  @Mutation(() => User)
+  async removeUserExperience(
+    @Arg("id") id: string,
+    @Arg("experience") amount: number,
+    @Arg("factionName") factionName: string
+  ) {
+    const user = await getUser(id);
+    if (!user) throw new UserInputError(`Cannot find user with id : ${id}`);
+
+    const faction = await Faction.findOne({ where: { name: factionName } });
+
+    if (!faction)
+      throw new UserInputError(
+        `Cannot find faction with name : ${factionName}`
+      );
+
+    const experience = await Experience.findOne({
+      where: { faction: faction!, user: user! }
+    });
+
+    if (!experience) {
+      const newExp: Experience = new Experience();
+      newExp.user = user;
+      newExp.faction = faction;
+      newExp.value = 0;
+      newExp.save();
+    } else
+      experience.value =
+        experience.value >= amount ? experience.value - amount : 0;
+
+    return user.save();
+  }
 }
