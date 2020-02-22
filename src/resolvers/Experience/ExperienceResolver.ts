@@ -103,11 +103,12 @@ export default class UserResolver {
       newExp.user = user;
       newExp.faction = faction;
       newExp.value = 0;
-      newExp.save();
-    } else
-      experience.value =
-        experience.value >= amount ? experience.value - amount : 0;
+      return newExp.save();
+    }
 
-    return user.save();
+    experience.value =
+      experience.value >= amount ? experience.value - amount : 0;
+
+    return experience.save();
   }
 }
