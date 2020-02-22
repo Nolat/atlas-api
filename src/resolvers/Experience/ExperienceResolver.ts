@@ -11,7 +11,17 @@ import getUser from "resolvers/User/helpers/getUser";
 export default class UserResolver {
   @Authorized()
   @Query(() => [Experience])
-  experiences() {
+  async experiences(@Arg("id", { nullable: true }) id?: string) {
+    if (id) {
+      const user = await User.findOne({ where: { id } });
+
+      if (!user) throw new UserInputError(`Cannot find user with id : ${id}`);
+
+      return Experience.find({
+        where: { user },
+        relations: ["faction", "user"]
+      });
+    }
     return Experience.find({ relations: ["faction", "user"] });
   }
 
