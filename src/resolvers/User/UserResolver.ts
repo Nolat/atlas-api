@@ -85,7 +85,7 @@ export default class UserResolver {
 
   @Authorized()
   @Mutation(() => User)
-  async giveUserXp(@Arg("id") id: string, @Arg("money") money: number) {
+  async giveUserMoney(@Arg("id") id: string, @Arg("money") money: number) {
     const user = await getUser(id);
     if (!user) throw new UserInputError(`Cannot find user with id : ${id}`);
     user.money += money;
