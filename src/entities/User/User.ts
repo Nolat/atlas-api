@@ -14,6 +14,7 @@ import {
 // * Entity
 import { Faction } from "entities";
 import Experience from "entities/Experience/Experience";
+import { userInfo } from "os";
 
 @Entity()
 @ObjectType()
@@ -44,7 +45,9 @@ export default class User extends BaseEntity {
     type => Experience,
     experience => experience.user
   )
-  experience: Experience[];
+  getExperience(): Promise<Experience | undefined> {
+    return Experience.findOne({ where: { faction: this.faction, user: this } });
+  }
 
   @Field(() => String)
   @CreateDateColumn({ type: "timestamp with time zone" })

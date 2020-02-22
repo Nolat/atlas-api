@@ -22,7 +22,7 @@ export default class Experience extends BaseEntity {
   @JoinColumn()
   @ManyToOne(
     type => User,
-    user => user.experience
+    user => user.getExperience()
   )
   user: User;
 
