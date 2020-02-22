@@ -19,19 +19,13 @@ export default class Experience extends BaseEntity {
   id: string;
 
   @Field(() => User)
+  @ManyToOne(() => User)
   @JoinColumn()
-  @ManyToOne(
-    type => User,
-    user => user.getExperience()
-  )
   user: User;
 
   @Field(() => Faction)
+  @ManyToOne(() => Faction)
   @JoinColumn()
-  @ManyToOne(
-    type => Faction,
-    faction => faction.id
-  )
   faction: Faction;
 
   @Field(() => Number)

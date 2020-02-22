@@ -39,13 +39,13 @@ export default class User extends BaseEntity {
   @Column({ type: "int", default: 100 })
   money: number;
 
-  @Field(() => Experience)
-  @OneToMany(
-    type => Experience,
-    experience => experience.user
-  )
-  getExperience(): Promise<Experience | undefined> {
-    return Experience.findOne({ where: { faction: this.faction, user: this } });
+  @Field(() => Number, { nullable: true })
+  async experience(): Promise<number | undefined> {
+    const experience = await Experience.findOne({
+      where: { faction: this.faction, user: this }
+    });
+
+    return experience ? experience.value : undefined;
   }
 
   @Field(() => String)
