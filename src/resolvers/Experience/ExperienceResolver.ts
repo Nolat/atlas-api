@@ -46,7 +46,7 @@ export default class UserResolver {
   }
 
   @Authorized()
-  @Mutation(() => User)
+  @Mutation(() => Experience)
   async giveUserExperience(
     @Arg("id") id: string,
     @Arg("experience") amount: number,
@@ -71,9 +71,45 @@ export default class UserResolver {
       newExp.user = user;
       newExp.faction = faction;
       newExp.value = amount;
-      newExp.save();
-    } else experience.value += amount;
+      return newExp.save();
+    }
+    experience.value += amount;
 
-    return user.save();
+    return experience.save();
+  }
+
+  @Authorized()
+  @Mutation(() => Experience)
+  async removeUserExperience(
+    @Arg("id") id: string,
+    @Arg("experience") amount: number,
+    @Arg("factionName") factionName: string
+  ) {
+    const user = await getUser(id);
+    if (!user) throw new UserInputError(`Cannot find user with id : ${id}`);
+
+    const faction = await Faction.findOne({ where: { name: factionName } });
+
+    if (!faction)
+      throw new UserInputError(
+        `Cannot find faction with name : ${factionName}`
+      );
+
+    const experience = await Experience.findOne({
+      where: { faction: faction!, user: user! }
+    });
+
+    if (!experience) {
+      const newExp: Experience = new Experience();
+      newExp.user = user;
+      newExp.faction = faction;
+      newExp.value = 0;
+      return newExp.save();
+    }
+
+    experience.value =
+      experience.value >= amount ? experience.value - amount : 0;
+
+    return experience.save();
   }
 }
