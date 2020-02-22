@@ -12,6 +12,7 @@ import {
 
 // * Entity
 import { Faction } from "entities";
+import Experience from "entities/Experience/Experience";
 
 @Entity()
 @ObjectType()
@@ -37,9 +38,9 @@ export default class User extends BaseEntity {
   @Column({ type: "int", default: 100 })
   money: number;
 
-  @Field(() => Number)
-  @Column({ type: "int", default: 0 })
-  experience: number;
+  @Field(() => Experience)
+  @ManyToOne(() => Experience)
+  experience: Experience;
 
   @Field(() => String)
   @CreateDateColumn({ type: "timestamp with time zone" })
