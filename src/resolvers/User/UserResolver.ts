@@ -4,7 +4,6 @@ import moment from "moment-timezone";
 
 // * Entities
 import { User, Faction } from "entities";
-import Experience from "entities/Experience/Experience";
 
 // * Helpers
 import getUser from "./helpers/getUser";
@@ -100,38 +99,6 @@ export default class UserResolver {
     const user = await getUser(id);
     if (!user) throw new UserInputError(`Cannot find user with id : ${id}`);
     user.money -= money;
-
-    return user.save();
-  }
-
-  @Authorized()
-  @Mutation(() => User)
-  async giveUserExperience(
-    @Arg("id") id: string,
-    @Arg("experience") amount: number,
-    @Arg("factionName") factionName: string
-  ) {
-    const user = await getUser(id);
-    if (!user) throw new UserInputError(`Cannot find user with id : ${id}`);
-
-    const faction = await Faction.findOne({ where: { name: factionName } });
-
-    if (!faction)
-      throw new UserInputError(
-        `Cannot find faction with name : ${factionName}`
-      );
-
-    const experience = await Experience.findOne({
-      where: { faction: faction!, user: user! }
-    });
-
-    if (!experience) {
-      const newExp: Experience = new Experience();
-      newExp.user = user;
-      newExp.faction = faction;
-      newExp.value = amount;
-      newExp.save();
-    } else experience.value += amount;
 
     return user.save();
   }
