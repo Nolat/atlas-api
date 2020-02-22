@@ -22,11 +22,9 @@ export const sendFactionMessage = async (server: Guild, faction: Faction) => {
   embed
     .setColor(color)
     .setTitle(`${icon} ${name}`)
-    .addField("Description", description)
-    .addField(
-      "Membres de la faction",
-      `La faction possède ${await faction.memberCount()} membres, avec un maximum de ${maxMember} membres.\n${canJoinMessage}`
-    );
+    .setDescription(description)
+    .addField("Membres", `${await faction.memberCount()}/${maxMember} membres`)
+    .addField("Informations supplémentaires", canJoinMessage);
 
   let serverMessage = await ServerMessage.findOne({
     where: { type: faction.name }
