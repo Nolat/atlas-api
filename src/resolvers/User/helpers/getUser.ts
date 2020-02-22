@@ -2,7 +2,7 @@
 import { User } from "entities";
 
 // * Utils
-import getMemberById from "../discord/getMemberById";
+import getMemberById from "helpers/discord/getMemberById";
 
 const getUser = async (
   id: string,
