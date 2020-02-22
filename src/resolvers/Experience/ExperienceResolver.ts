@@ -2,8 +2,7 @@ import { UserInputError } from "apollo-server-express";
 import { Authorized, Query, Resolver, Arg, Mutation } from "type-graphql";
 
 // * Entities
-import { Faction, User } from "entities";
-import Experience from "entities/Experience/Experience";
+import { Experience, Faction, User } from "entities";
 
 // * Helpers
 import getUser from "resolvers/User/helpers/getUser";
