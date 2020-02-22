@@ -9,6 +9,8 @@ import { User, Faction } from "entities";
 import getUser from "./helpers/getUser";
 import giveFactionRole from "./helpers/giveFactionRole";
 import removeFactionRole from "./helpers/removeFactionRole";
+import sendFactionLeaveMessage from "./helpers/sendFactionLeaveMessage";
+import sendFactionJoinMessage from "./helpers/sendFactionJoinMessage";
 
 @Resolver(() => User)
 export default class UserResolver {
@@ -55,6 +57,7 @@ export default class UserResolver {
     user.joinedFactionAt = moment().toISOString();
 
     giveFactionRole(id, factionName);
+    sendFactionJoinMessage(id, faction);
 
     return user.save();
   }
@@ -72,6 +75,7 @@ export default class UserResolver {
       );
 
     removeFactionRole(id, user.faction.name);
+    sendFactionLeaveMessage(id, user.faction);
 
     user.faction = null;
     user.joinedFactionAt = null;
