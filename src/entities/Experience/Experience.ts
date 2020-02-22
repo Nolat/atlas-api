@@ -5,7 +5,7 @@ import {
   Column,
   JoinColumn,
   PrimaryGeneratedColumn,
-  OneToMany
+  ManyToOne
 } from "typeorm";
 
 // * Entity
@@ -20,7 +20,7 @@ export default class Experience extends BaseEntity {
 
   @Field(() => User)
   @JoinColumn()
-  @OneToMany(
+  @ManyToOne(
     type => User,
     user => user.experience
   )
@@ -28,7 +28,7 @@ export default class Experience extends BaseEntity {
 
   @Field(() => Faction)
   @JoinColumn()
-  @OneToMany(
+  @ManyToOne(
     type => Faction,
     faction => faction.id
   )

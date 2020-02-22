@@ -7,7 +7,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn
+  JoinColumn,
+  OneToMany
 } from "typeorm";
 
 // * Entity
@@ -39,8 +40,11 @@ export default class User extends BaseEntity {
   money: number;
 
   @Field(() => Experience)
-  @ManyToOne(() => Experience)
-  experience: Experience;
+  @OneToMany(
+    type => Experience,
+    experience => experience.user
+  )
+  experience: Experience[];
 
   @Field(() => String)
   @CreateDateColumn({ type: "timestamp with time zone" })
