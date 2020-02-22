@@ -14,7 +14,6 @@ import {
 // * Entity
 import { Faction } from "entities";
 import Experience from "entities/Experience/Experience";
-import { userInfo } from "os";
 
 @Entity()
 @ObjectType()
