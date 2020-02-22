@@ -33,6 +33,14 @@ export default class User extends BaseEntity {
   @Column({ type: "timestamp with time zone", nullable: true })
   joinedFactionAt: string | null;
 
+  @Field(() => Number)
+  @Column({ type: "int", default: 100 })
+  money: number;
+
+  @Field(() => Number)
+  @Column({ type: "int", default: 0 })
+  experience: number;
+
   @Field(() => String)
   @CreateDateColumn({ type: "timestamp with time zone" })
   createdAt: string;
