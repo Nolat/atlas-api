@@ -71,8 +71,9 @@ export default class UserResolver {
       newExp.user = user;
       newExp.faction = faction;
       newExp.value = amount;
-      newExp.save();
-    } else experience.value += amount;
+      return newExp.save();
+    }
+    experience.value += amount;
 
     return user.save();
   }
