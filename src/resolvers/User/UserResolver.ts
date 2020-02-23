@@ -95,10 +95,10 @@ export default class UserResolver {
 
   @Authorized()
   @Mutation(() => User)
-  async removeUserMoney(@Arg("id") id: string, @Arg("money") money: number) {
+  async removeUserMoney(@Arg("id") id: string, @Arg("amount") amount: number) {
     const user = await getUser(id);
     if (!user) throw new UserInputError(`Cannot find user with id : ${id}`);
-    user.money -= money;
+    user.money = user.money >= amount ? user.money - amount : 0;
 
     return user.save();
   }
