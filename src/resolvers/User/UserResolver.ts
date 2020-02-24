@@ -53,6 +53,12 @@ export default class UserResolver {
         `Cannot find faction with name : ${factionName}`
       );
 
+    if (!(await faction.isJoinable()))
+      throw new ApolloError(
+        `Faction : ${factionName} is not joinable`,
+        "FACTION_NOT_JOINABLE"
+      );
+
     user.faction = faction;
     user.joinedFactionAt = moment().toISOString();
 
