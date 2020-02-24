@@ -13,7 +13,12 @@ const sendFactionJoinMessage = async (id: string, faction: Faction) => {
   const channel: TextChannel = server.channels.find(
     c =>
       c.name.includes("annonces") &&
-      c.name.includes(faction.name.toLowerCase()) &&
+      c.name.includes(
+        faction.name
+          .toLowerCase()
+          .split(" ")
+          .join("-")
+      ) &&
       c.type === "text"
   ) as TextChannel;
 
