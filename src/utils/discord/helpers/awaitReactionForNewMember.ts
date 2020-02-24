@@ -60,7 +60,7 @@ export const awaitReactionAsNewMember = async (
     joinleaveChannel.send(`${member.user.toString()} est devenu Joueur.`);
 
     const generalChannel: TextChannel = server.channels.find(
-      channel => channel.name.includes("general") && channel.type === "text"
+      channel => channel.name === "general" && channel.type === "text"
     ) as TextChannel;
 
     generalChannel.send(
