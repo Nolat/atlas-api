@@ -14,7 +14,7 @@ const deleteFactionRoles = async (message: ServerMessage) => {
 
   try {
     const factionMessage = await factionsChannel.fetchMessage(
-      message.idMessage
+      message.idMessage!
     );
     factionMessage.delete();
   } catch (error) {
