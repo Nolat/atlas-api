@@ -31,4 +31,8 @@ export default class Experience extends BaseEntity {
   @Field(() => Number)
   @Column({ type: "int", default: 0 })
   value: number;
+
+  @Field(() => Number)
+  @Column({ type: "int", default: 0 })
+  level: number;
 }

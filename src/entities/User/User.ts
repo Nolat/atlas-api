@@ -48,6 +48,15 @@ export default class User extends BaseEntity {
     return experience ? experience.value : undefined;
   }
 
+  @Field(() => Number, { nullable: true })
+  async level(): Promise<number | undefined> {
+    const experience = await Experience.findOne({
+      where: { faction: this.faction, user: this }
+    });
+
+    return experience ? experience.level : undefined;
+  }
+
   @Field(() => String)
   @CreateDateColumn({ type: "timestamp with time zone" })
   createdAt: string;
