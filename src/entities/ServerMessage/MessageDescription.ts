@@ -5,8 +5,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
-  JoinColumn
+  ManyToOne
 } from "typeorm";
 
 import ServerMessage from "./ServerMessage";
@@ -17,7 +16,6 @@ export default class MessageDescription extends BaseEntity {
   id: string;
 
   @ManyToOne(() => ServerMessage)
-  @JoinColumn()
   serverMessage: ServerMessage;
 
   @Column({ type: "text", nullable: true })
