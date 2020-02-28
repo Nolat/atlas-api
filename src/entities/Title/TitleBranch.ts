@@ -1,40 +1,33 @@
 import { Field, ObjectType } from "type-graphql";
 import {
   Entity,
+  PrimaryGeneratedColumn,
   BaseEntity,
   Column,
-  JoinColumn,
-  PrimaryGeneratedColumn,
-  ManyToOne,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  ManyToOne,
+  JoinColumn
 } from "typeorm";
 
 // * Entity
-import { User, Faction } from "entities";
+import { Faction } from "entities";
 
 @Entity()
 @ObjectType()
-export default class Experience extends BaseEntity {
+export default class TitleBranch extends BaseEntity {
   @Field(() => String)
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Field(() => User)
-  @ManyToOne(() => User)
-  user: User;
+  @Field(() => String)
+  @Column({ type: "text" })
+  name: string;
 
   @Field(() => Faction)
   @ManyToOne(() => Faction)
+  @JoinColumn()
   faction: Faction;
-
-  @Field(() => Number)
-  @Column({ type: "int", default: 0 })
-  value: number;
-
-  @Field(() => Number)
-  @Column({ type: "int", default: 0 })
-  level: number;
 
   @Field(() => String)
   @CreateDateColumn({ type: "timestamp with time zone" })
