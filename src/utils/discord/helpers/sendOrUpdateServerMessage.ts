@@ -26,7 +26,16 @@ const sendOrUpdateServerMessage = async (
   messageDescriptions.forEach(md => {
     if (md.title && !md.description) embed.setTitle(md.title);
     else if (!md.title && md.description) embed.setDescription(md.description);
-    else embed.addField(md.title, md.description);
+    else if (type === "#regles-conquetes") {
+      const carteChannel = server.channels.find(
+        channel => channel.name.includes("carte") && channel.type === "text"
+      ) as TextChannel;
+
+      embed.addField(
+        md.title,
+        md.description!.replace("CARTE_CHANNEL", `${carteChannel}`)
+      );
+    } else embed.addField(md.title, md.description);
   });
 
   // ! Ajout du salon #factions dans le message d'Accueil
@@ -36,7 +45,7 @@ const sendOrUpdateServerMessage = async (
     ) as TextChannel;
 
     embed.setDescription(
-      embed.description?.replace("FACTION_CHANNEL", factionsChannel.toString())
+      embed.description?.replace("FACTION_CHANNEL", `${factionsChannel}`)
     );
   }
 
