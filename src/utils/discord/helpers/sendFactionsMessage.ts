@@ -51,7 +51,7 @@ export const sendFactionMessage = async (server: Guild, faction: Faction) => {
 
     try {
       factionMessage = await factionsChannel.fetchMessage(
-        serverMessage.idMessage
+        serverMessage.idMessage!
       );
       factionMessage = await factionMessage.edit({ embed });
     } catch (error) {

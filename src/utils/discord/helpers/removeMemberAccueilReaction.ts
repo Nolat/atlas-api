@@ -20,7 +20,7 @@ const removeMemberAccueilReaction = async (
   ) as TextChannel;
 
   const accueilMessage: Message = await accueilChannel.fetchMessage(
-    serverMessage.idMessage
+    serverMessage.idMessage!
   );
 
   accueilMessage.reactions.forEach(reaction => reaction.remove(member.id));

@@ -25,7 +25,7 @@ export const awaitReactionAsNewMember = async (
   member: GuildMember
 ) => {
   const serverMessage = await ServerMessage.findOne({
-    where: { type: "Accueil" }
+    where: { type: "#accueil" }
   });
 
   if (!serverMessage) {
@@ -43,7 +43,7 @@ export const awaitReactionAsNewMember = async (
   ) as TextChannel;
 
   const accueilMessage: Message = await accueilChannel.fetchMessage(
-    serverMessage.idMessage
+    serverMessage.idMessage!
   );
 
   const filter = (reaction: MessageReaction, user: User) => {

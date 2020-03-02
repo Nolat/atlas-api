@@ -53,6 +53,12 @@ export default class UserResolver {
         `Cannot find faction with name : ${factionName}`
       );
 
+    if (!(await faction.isJoinable()))
+      throw new ApolloError(
+        `Faction : ${factionName} is not joinable`,
+        "FACTION_NOT_JOINABLE"
+      );
+
     user.faction = faction;
     user.joinedFactionAt = moment().toISOString();
 
@@ -79,6 +85,26 @@ export default class UserResolver {
 
     user.faction = null;
     user.joinedFactionAt = null;
+
+    return user.save();
+  }
+
+  @Authorized()
+  @Mutation(() => User)
+  async giveUserMoney(@Arg("id") id: string, @Arg("money") money: number) {
+    const user = await getUser(id);
+    if (!user) throw new UserInputError(`Cannot find user with id : ${id}`);
+    user.money += money;
+
+    return user.save();
+  }
+
+  @Authorized()
+  @Mutation(() => User)
+  async removeUserMoney(@Arg("id") id: string, @Arg("amount") amount: number) {
+    const user = await getUser(id);
+    if (!user) throw new UserInputError(`Cannot find user with id : ${id}`);
+    user.money = user.money >= amount ? user.money - amount : 0;
 
     return user.save();
   }

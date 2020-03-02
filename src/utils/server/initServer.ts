@@ -7,7 +7,7 @@ import passport from "passport";
 import { buildSchema } from "type-graphql";
 
 // * Resolvers
-import { FactionResolver, UserResolver } from "resolvers";
+import { ExperienceResolver, FactionResolver, UserResolver } from "resolvers";
 
 // * Routes
 import indexRouter from "routes/index";
@@ -20,7 +20,7 @@ const SECRET_TOKEN: string = process.env.SECRET_TOKEN!;
 const initServer = async () => {
   // * Build Schema
   const schema = await buildSchema({
-    resolvers: [FactionResolver, UserResolver],
+    resolvers: [ExperienceResolver, FactionResolver, UserResolver],
     authChecker: ({ context: { req } }) => {
       return req.headers.authorization === SECRET_TOKEN;
     },
