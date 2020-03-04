@@ -1,0 +1,58 @@
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
+  heroku: circleci/heroku@1.0.1
+  sonarcloud: sonarsource/sonarcloud@1.0.1
+workflows:
+  test-lint-and-deploy:
+    jobs:
+      - test-and-lint
+      - sonar:
+          context: SonarCloud
+          requires:
+            - test-and-lint
+      - deploy-to-dev:
+          requires:
+            - test-and-lint
+          filters:
+            branches:
+              only: develop
+      - deploy-to-prod:
+          requires:
+            - test-and-lint
+          filters:
+            branches:
+              only: master
+jobs:
+  test-and-lint:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: yarn
+            - run: yarn lint --fix
+            - run: yarn test --passWithNoTests
+  sonar:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - checkout
+      - sonarcloud/scan
+  deploy-to-dev:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - heroku/deploy-via-git:
+          force: true
+          app-name: $HEROKU_DEV_APP_NAME
+  deploy-to-prod:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - heroku/deploy-via-git:
+          force: true
+          app-name: $HEROKU_APP_NAME
