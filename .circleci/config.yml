@@ -1,0 +1,47 @@
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
+  heroku: circleci/heroku@1.0.1
+workflows:
+  deploy:
+    jobs:
+      - build-and-test
+      - deploy-dev:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only: develop
+      - deploy-prod:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only: master
+jobs:
+  build-and-test:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: yarn
+            - run: yarn lint --fix
+            - run: yarn test --passWithNoTests
+  deploy-dev:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - heroku/deploy-via-git:
+          force: true
+          app-name: $HEROKU_DEV_APP_NAME
+  deploy-prod:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - heroku/deploy-via-git:
+          force: true
+          app-name: $HEROKU_APP_NAME
