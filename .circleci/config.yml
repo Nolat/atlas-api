@@ -2,10 +2,12 @@ version: 2.1
 orbs:
   node: circleci/node@1.1.6
   heroku: circleci/heroku@1.0.1
+  sonarcloud: sonarsource/sonarcloud@1.0.1
 workflows:
   deploy:
     jobs:
-      - build-and-test
+      - build-and-test:
+          context: SonarCloud
       - deploy-dev:
           requires:
             - build-and-test
@@ -29,6 +31,7 @@ jobs:
             - run: yarn
             - run: yarn lint --fix
             - run: yarn test --passWithNoTests
+      - sonarcloud/scan
   deploy-dev:
     executor: heroku/default
     steps:
