@@ -19,8 +19,8 @@ import {
 import indexRouter from "routes/index";
 
 // * Environment variables
-const PORT: number = parseInt(process.env.PORT!, 10);
-const SECRET_TOKEN: string = process.env.SECRET_TOKEN!;
+const PORT: number = parseInt(process.env.PORT, 10);
+const { SECRET_TOKEN } = process.env;
 
 // * Initialize API server
 const initServer = async () => {
@@ -47,10 +47,10 @@ const initServer = async () => {
   });
 
   // * Setup app
-  await setupServer(app, server);
+  setupServer(app, server);
 
   // * Finally start the app
-  await startApp(app, server);
+  startApp(app, server);
 };
 
 // * Setup Express app & ApolloServer

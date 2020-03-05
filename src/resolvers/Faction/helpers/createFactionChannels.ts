@@ -1,4 +1,4 @@
-import { Guild, Role } from "discord.js";
+import { Role } from "discord.js";
 
 // * Helpers
 import getDiscordGuild from "helpers/discord/getDiscordGuild";
@@ -9,8 +9,10 @@ const createFactionChannels = async (
   icon: string,
   role: Role
 ) => {
-  const server: Guild = getDiscordGuild()!;
-  const staff: Role = await getStaffRole();
+  const server = getDiscordGuild();
+  if (!server) throw new Error("Discord Guild is not defined!");
+
+  const staff: Role = getStaffRole();
 
   const category = await server.createChannel(`${icon} ${name}`, {
     type: "category",

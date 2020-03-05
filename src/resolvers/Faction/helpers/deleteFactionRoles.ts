@@ -1,10 +1,10 @@
-import { Guild } from "discord.js";
-
 // * Helpers
 import getDiscordGuild from "helpers/discord/getDiscordGuild";
 
 const deleteFactionRoles = (name: string) => {
-  const server: Guild = getDiscordGuild()!;
+  const server = getDiscordGuild();
+  if (!server) throw new Error("Discord Guild is not defined!");
+
   const roles = server.roles.filter(role =>
     role.name.toLowerCase().includes(name.toLowerCase())
   );

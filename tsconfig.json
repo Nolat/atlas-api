@@ -13,7 +13,7 @@
     "esModuleInterop": true,
     "baseUrl": "src"
   },
-  "include": ["./src/**/*", "./src/**/**/*"],
+  "include": ["./src/**/*", "./src/**/**/*", "src/environment.d.ts"],
   "exclude": [
     "node_modules",
     "**/*.spec.ts",

@@ -11,16 +11,17 @@ const removeMemberAccueilReaction = async (
     where: { type: "Accueil" }
   });
 
-  if (!serverMessage) {
-    throw new Error("Cannot find accueil serverMessage");
-  }
+  if (!serverMessage) throw new Error("Cannot find accueil serverMessage");
 
   const accueilChannel: TextChannel = server.channels.find(
     channel => channel.id === serverMessage.idChannel && channel.type === "text"
   ) as TextChannel;
 
+  if (!serverMessage.idMessage)
+    throw new Error("Accueil ServerMessage don't have message id");
+
   const accueilMessage: Message = await accueilChannel.fetchMessage(
-    serverMessage.idMessage!
+    serverMessage.idMessage
   );
 
   accueilMessage.reactions.forEach(reaction => reaction.remove(member.id));
