@@ -28,9 +28,7 @@ export const awaitReactionAsNewMember = async (
     where: { type: "#accueil" }
   });
 
-  if (!serverMessage) {
-    throw new Error("Cannot find accueil serverMessage");
-  }
+  if (!serverMessage) throw new Error("Cannot find accueil serverMessage");
 
   const yesEmoji: Emoji = server.emojis.find(emoji => emoji.name === "yes");
 
@@ -42,8 +40,11 @@ export const awaitReactionAsNewMember = async (
     channel => channel.id === serverMessage.idChannel && channel.type === "text"
   ) as TextChannel;
 
+  if (!serverMessage.idMessage)
+    throw new Error("Accueil ServerMessage don't have message id");
+
   const accueilMessage: Message = await accueilChannel.fetchMessage(
-    serverMessage.idMessage!
+    serverMessage.idMessage
   );
 
   const filter = (reaction: MessageReaction, user: User) => {

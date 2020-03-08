@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable import/namespace */
 import "reflect-metadata";
 import "lib/env";
+import * as environment from "environment";
 
 // * Utils
 import { initConnection } from "utils/connection";

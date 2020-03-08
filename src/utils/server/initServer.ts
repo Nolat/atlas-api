@@ -7,20 +7,32 @@ import passport from "passport";
 import { buildSchema } from "type-graphql";
 
 // * Resolvers
-import { ExperienceResolver, FactionResolver, UserResolver } from "resolvers";
+import {
+  ExperienceResolver,
+  FactionResolver,
+  TitleResolver,
+  TitleBranchResolver,
+  UserResolver
+} from "resolvers";
 
 // * Routes
 import indexRouter from "routes/index";
 
 // * Environment variables
-const PORT: number = parseInt(process.env.PORT!, 10);
-const SECRET_TOKEN: string = process.env.SECRET_TOKEN!;
+const PORT: number = parseInt(process.env.PORT, 10);
+const { SECRET_TOKEN } = process.env;
 
 // * Initialize API server
 const initServer = async () => {
   // * Build Schema
   const schema = await buildSchema({
-    resolvers: [ExperienceResolver, FactionResolver, UserResolver],
+    resolvers: [
+      ExperienceResolver,
+      FactionResolver,
+      TitleResolver,
+      TitleBranchResolver,
+      UserResolver
+    ],
     authChecker: ({ context: { req } }) => {
       return req.headers.authorization === SECRET_TOKEN;
     },
@@ -35,10 +47,10 @@ const initServer = async () => {
   });
 
   // * Setup app
-  await setupServer(app, server);
+  setupServer(app, server);
 
   // * Finally start the app
-  await startApp(app, server);
+  startApp(app, server);
 };
 
 // * Setup Express app & ApolloServer

@@ -7,13 +7,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn,
   OneToMany
 } from "typeorm";
 
 // * Entity
-import { Faction } from "entities";
-import Experience from "entities/Experience/Experience";
+import { Faction, Experience, UserTitle } from "entities";
 
 @Entity()
 @ObjectType()
@@ -26,9 +24,15 @@ export default class User extends BaseEntity {
   @Column({ type: "text" })
   username: string;
 
+  @Field(() => UserTitle)
+  @OneToMany(
+    () => UserTitle,
+    userTitle => userTitle.user
+  )
+  titles: UserTitle;
+
   @Field(() => Faction, { nullable: true })
   @ManyToOne(() => Faction, { onDelete: "SET NULL", nullable: true })
-  @JoinColumn()
   faction: Faction | null | undefined;
 
   @Field(() => String, { nullable: true })

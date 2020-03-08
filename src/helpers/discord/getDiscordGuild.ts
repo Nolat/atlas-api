@@ -1,13 +1,12 @@
 import { Guild } from "discord.js";
 
-import client from "utils/discord/client";
+import client from "utils/discord/DiscordClient";
 
 // * Environment variables
-const DISCORD_SERVER_ID: string = process.env.DISCORD_SERVER_ID!;
+const { DISCORD_SERVER_ID } = process.env;
 
 const getDiscordGuild = (): Guild | undefined => {
-  const guild = client.CLIENT.guilds.get(DISCORD_SERVER_ID);
-  return guild;
+  return client.CLIENT.guilds.get(DISCORD_SERVER_ID);
 };
 
 export default getDiscordGuild;

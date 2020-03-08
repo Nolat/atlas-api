@@ -49,9 +49,12 @@ export const sendFactionMessage = async (server: Guild, faction: Faction) => {
         channel.id === serverMessage?.idChannel && channel.type === "text"
     ) as TextChannel;
 
+    if (!serverMessage.idMessage)
+      throw new Error("Factions ServerMessage don't have message id");
+
     try {
       factionMessage = await factionsChannel.fetchMessage(
-        serverMessage.idMessage!
+        serverMessage.idMessage
       );
       factionMessage = await factionMessage.edit({ embed });
     } catch (error) {

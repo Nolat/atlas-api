@@ -14,8 +14,7 @@ import sendReglementMessage from "./helpers/sendReglementMessage";
 import { sendFactionsMessage } from "./helpers/sendFactionsMessage";
 
 // * Environment variables
-const DISCORD_TOKEN: string = process.env.DISCORD_TOKEN!;
-const DISCORD_SERVER_ID: string = process.env.DISCORD_SERVER_ID!;
+const { DISCORD_TOKEN, DISCORD_SERVER_ID } = process.env;
 
 @Discord
 export default class DiscordClient {

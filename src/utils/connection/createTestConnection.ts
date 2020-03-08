@@ -1,7 +1,7 @@
 import { createConnection } from "typeorm";
 
 // * Environment variables
-const TEST_DATABASE_URL: string = process.env.TEST_DATABASE_URL!;
+const { TEST_DATABASE_URL } = process.env;
 
 // * Initialize DB connection
 const createTestConnection = async () =>
