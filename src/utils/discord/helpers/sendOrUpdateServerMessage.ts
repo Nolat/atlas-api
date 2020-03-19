@@ -57,7 +57,7 @@ const addMessageDescriptionToEmbed = (
   messageDescriptions.forEach(md => {
     if (md.title && !md.description) embed.setTitle(md.title);
     else if (!md.title && md.description) embed.setDescription(md.description);
-    else if (type === "#regles-conquetes") {
+    else if (type === "!regles-conquetes") {
       const carteChannel = server.channels.find(
         channel => channel.name.includes("carte") && channel.type === "text"
       ) as TextChannel;
