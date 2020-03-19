@@ -1,4 +1,4 @@
-import { Guild, Role } from "discord.js";
+import { Role } from "discord.js";
 
 // * Helpers
 import getDiscordGuild from "helpers/discord/getDiscordGuild";
@@ -9,7 +9,8 @@ const createFactionRoles = (
   icon: string
 ): Promise<Role> =>
   new Promise(resolve => {
-    const server: Guild = getDiscordGuild()!;
+    const server = getDiscordGuild();
+    if (!server) throw new Error("Discord Guild is not defined!");
 
     server
       .createRole({

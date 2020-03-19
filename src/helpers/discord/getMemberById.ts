@@ -1,11 +1,12 @@
-import { Guild, GuildMember } from "discord.js";
+import { GuildMember } from "discord.js";
 
 import getDiscordGuild from "./getDiscordGuild";
 
 const getMemberById = (id: string): GuildMember => {
-  const guild: Guild = getDiscordGuild()!;
-  const member: GuildMember = guild.members.find(m => m.id === id);
-  return member;
+  const server = getDiscordGuild();
+  if (!server) throw new Error("Discord Guild is not defined!");
+
+  return server.members.find(m => m.id === id);
 };
 
 export default getMemberById;

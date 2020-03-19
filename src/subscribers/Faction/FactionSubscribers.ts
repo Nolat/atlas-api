@@ -1,5 +1,4 @@
 import { EventSubscriber, EntitySubscriberInterface } from "typeorm";
-import { Guild } from "discord.js";
 
 // * Entities
 import { Faction } from "entities";
@@ -17,7 +16,9 @@ export class FactionSubscriber implements EntitySubscriberInterface<Faction> {
   }
 
   async afterUpdate() {
-    const server: Guild = getDiscordGuild()!;
+    const server = getDiscordGuild();
+    if (!server) throw new Error("Discord Guild is not defined!");
+
     sendFactionsMessage(server);
   }
 }

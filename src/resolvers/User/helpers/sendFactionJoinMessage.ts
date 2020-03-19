@@ -1,4 +1,4 @@
-import { GuildMember, Guild, TextChannel, RichEmbed } from "discord.js";
+import { GuildMember, TextChannel, RichEmbed } from "discord.js";
 
 // * Entities
 import { Faction } from "entities";
@@ -8,7 +8,9 @@ import getDiscordGuild from "helpers/discord/getDiscordGuild";
 import getMemberById from "helpers/discord/getMemberById";
 
 const sendFactionJoinMessage = async (id: string, faction: Faction) => {
-  const server: Guild = getDiscordGuild()!;
+  const server = getDiscordGuild();
+  if (!server) throw new Error("Discord Guild is not defined!");
+
   const member: GuildMember = getMemberById(id);
   const channel: TextChannel = server.channels.find(
     c =>

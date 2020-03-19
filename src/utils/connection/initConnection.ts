@@ -1,11 +1,11 @@
 import { createConnection } from "typeorm";
 
 // * Environment variables
-const NODE_ENV: string = process.env.NODE_ENV!;
-const DATABASE_URL: string =
+const { NODE_ENV } = process.env;
+const DATABASE_URL =
   NODE_ENV === "production"
-    ? process.env.DATABASE_URL!
-    : process.env.DEV_DATABASE_URL!;
+    ? process.env.DATABASE_URL
+    : process.env.DEV_DATABASE_URL;
 
 // * Initialize DB connection
 const initConnection = async () => {

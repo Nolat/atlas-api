@@ -12,7 +12,7 @@ import getXPByLevel from "./helpers/getXPByLevel";
 import sendPrivateLevelNotification from "./helpers/sendPrivateLevelNotification";
 
 @Resolver(() => Experience)
-export default class UserResolver {
+export default class ExperienceResolver {
   @Authorized()
   @Query(() => [Experience])
   async experiences(@Arg("id", { nullable: true }) id?: string) {
@@ -77,7 +77,7 @@ export default class UserResolver {
       );
 
     let experience = await Experience.findOne({
-      where: { faction: faction!, user: user! }
+      where: { faction, user }
     });
 
     if (!experience) {
@@ -125,7 +125,7 @@ export default class UserResolver {
       );
 
     let experience = await Experience.findOne({
-      where: { faction: faction!, user: user! }
+      where: { faction, user }
     });
 
     if (!experience) {

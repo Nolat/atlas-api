@@ -28,7 +28,7 @@ export default class FactionResolver {
   @Authorized()
   @Query(() => Faction)
   async faction(@Arg("name") name: string) {
-    const faction = await Faction.findOne({ where: { name } });
+    const faction = await Faction.findOne({ where: `"name" ILIKE '${name}'` });
 
     if (!faction)
       throw new UserInputError(`Cannot find faction with name : ${name}`);
@@ -65,7 +65,8 @@ export default class FactionResolver {
     const role: Role = await createFactionRoles(name, color, icon);
     createFactionChannels(name, icon, role);
 
-    const server = getDiscordGuild()!;
+    const server = getDiscordGuild();
+    if (!server) throw new Error("Discord Guild is not defined!");
     sendFactionMessage(server, faction);
 
     return faction;
