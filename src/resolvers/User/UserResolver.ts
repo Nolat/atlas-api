@@ -17,13 +17,27 @@ export default class UserResolver {
   @Authorized()
   @Query(() => [User])
   users() {
-    return User.find({ relations: ["faction"] });
+    return User.find({
+      relations: [
+        "faction",
+        "titles",
+        "titles.title",
+        "titles.title.branch",
+        "titles.title.faction"
+      ]
+    });
   }
 
   @Authorized()
   @Query(() => User)
   async user(@Arg("id") id: string) {
-    const user = await getUser(id, ["faction"]);
+    const user = await getUser(id, [
+      "faction",
+      "titles",
+      "titles.title",
+      "titles.title.branch",
+      "titles.title.faction"
+    ]);
 
     if (!user) throw new UserInputError(`Cannot find user with id : ${id}`);
 
