@@ -24,12 +24,12 @@ export default class User extends BaseEntity {
   @Column({ type: "text" })
   username: string;
 
-  @Field(() => UserTitle)
+  @Field(() => UserTitle, { nullable: true })
   @OneToMany(
     () => UserTitle,
     userTitle => userTitle.user
   )
-  titles: UserTitle;
+  titles: UserTitle[];
 
   @Field(() => Faction, { nullable: true })
   @ManyToOne(() => Faction, { onDelete: "SET NULL", nullable: true })

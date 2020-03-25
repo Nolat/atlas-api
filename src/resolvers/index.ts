@@ -4,5 +4,6 @@ export { default as FactionResolver } from "./Faction/FactionResolver";
 
 export { default as TitleResolver } from "./Title/TitleResolver";
 export { default as TitleBranchResolver } from "./Title/TitleBranchResolver";
+export { default as UserTitleResolver } from "./Title/UserTitleResolver";
 
 export { default as UserResolver } from "./User/UserResolver";
