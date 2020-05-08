@@ -11,7 +11,8 @@ const sendLeaveMessage = async (server: Guild, member: GuildMember) => {
 
   let message = `${member.user.toString()} a quitté le serveur.`;
   if (months > 0) {
-    message += ` Il a été avec nous ${months} mois et ${days} jours.`;
+    message += ` Il a été avec nous ${months} mois et ${days -
+      30 * months} jours.`;
   }
 
   joinleaveChannel.send(message);
