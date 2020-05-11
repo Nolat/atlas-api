@@ -4,6 +4,7 @@ import { ObjectLiteral } from "typeorm";
 
 // * Entities
 import { UserTitle, User, Title } from "entities";
+import getUser from "../User/helpers/getUser";
 
 @Resolver(() => UserTitle)
 export default class UserTitleResolver {
@@ -133,6 +134,48 @@ export default class UserTitleResolver {
     const userTitle = new UserTitle();
     userTitle.user = user;
     userTitle.title = title;
+    return userTitle.save();
+  }
+
+  @Authorized()
+  @Mutation(() => UserTitle)
+  async setUserActiveTitle(
+    @Arg("id") id: string,
+    @Arg("title") titleName: string
+  ) {
+    const user = await getUser(id);
+
+    if (!user) throw new UserInputError(`Cannot find user with id : ${id}`);
+
+    const title = await Title.findOne({
+      where: {
+        name: titleName
+      }
+    });
+
+    if (!title)
+      throw new UserInputError(`Cannot find title with name : ${titleName}`);
+
+    const userTitle: UserTitle | undefined = await UserTitle.findOne({
+      where: { title, user: user.id }
+    });
+
+    if (!userTitle) throw new UserInputError(`User don't have unlock it YEET`);
+    if (userTitle.isEnabled)
+      throw new ApolloError("Title already set", "TITLE_ALREADY_SET");
+
+    const titlesActivate: UserTitle[] | undefined = await UserTitle.find({
+      where: { user: user.id, isEnabled: true }
+    });
+
+    await titlesActivate.forEach(titleActivated => {
+      titleActivated.isEnabled = false;
+      titleActivated.save();
+    });
+
+    userTitle.isEnabled = true;
+    userTitle.user = user;
+
     return userTitle.save();
   }
 }

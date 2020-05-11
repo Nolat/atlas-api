@@ -16,7 +16,7 @@ const initConnection = async () => {
     },
     url: DATABASE_URL,
     synchronize: true,
-    logging: false,
+    logging: true,
     cache: true,
     entities: ["src/entities/**/*"],
     subscribers: ["src/subscribers/**/*"]
