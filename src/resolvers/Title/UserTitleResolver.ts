@@ -157,6 +157,7 @@ export default class UserTitleResolver {
       throw new UserInputError(`Cannot find title with name : ${titleName}`);
 
     const userTitle: UserTitle | undefined = await UserTitle.findOne({
+      relations: ["user", "title"],
       where: { title, user: user.id }
     });
 
