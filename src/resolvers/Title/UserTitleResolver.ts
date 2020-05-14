@@ -4,6 +4,7 @@ import { ObjectLiteral } from "typeorm";
 
 // * Entities
 import { UserTitle, User, Title } from "entities";
+import unsetUserTitle from "./helpers/unsetUserTitle";
 
 @Resolver(() => UserTitle)
 export default class UserTitleResolver {
@@ -134,5 +135,11 @@ export default class UserTitleResolver {
     userTitle.user = user;
     userTitle.title = title;
     return userTitle.save();
+  }
+
+  @Authorized()
+  @Mutation(() => UserTitle)
+  async unsetUserTitle(@Arg("id") id: string) {
+    return unsetUserTitle(id);
   }
 }
