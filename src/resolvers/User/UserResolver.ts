@@ -3,7 +3,7 @@ import { Authorized, Query, Resolver, Arg, Mutation } from "type-graphql";
 import moment from "moment-timezone";
 
 // * Entities
-import { User, Faction } from "entities";
+import { User, Faction, UserTitle } from "entities";
 
 // * Helpers
 import getUser from "./helpers/getUser";
@@ -11,6 +11,7 @@ import giveFactionRole from "./helpers/giveFactionRole";
 import removeFactionRole from "./helpers/removeFactionRole";
 import sendFactionLeaveMessage from "./helpers/sendFactionLeaveMessage";
 import sendFactionJoinMessage from "./helpers/sendFactionJoinMessage";
+import unsetUserTitle from "../Title/helpers/unsetUserTitle";
 
 @Resolver(() => User)
 export default class UserResolver {
@@ -96,6 +97,18 @@ export default class UserResolver {
 
     removeFactionRole(id, user.faction.name);
     sendFactionLeaveMessage(id, user.faction);
+
+    const userTitle: UserTitle | undefined = await UserTitle.findOne({
+      relations: ["user", "title", "title.faction"],
+      where: {
+        user,
+        isEnabled: true
+      }
+    });
+
+    if (userTitle?.title.faction?.name === user.faction.name) {
+      await unsetUserTitle(user.id);
+    }
 
     user.faction = null;
     user.joinedFactionAt = null;
